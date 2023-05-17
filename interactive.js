@@ -1,7 +1,8 @@
 var autoDetectCheckBox = document.getElementById("autoDetectCheckBox");
 var locationTextField = document.getElementById("locationTextField");
 var keywordTextField = document.getElementById("keywordTextField");
-var keywordTextField = document.getElementById("keywordTextField");
+var distanceTextField = document.getElementById("distanceTextField");
+var categorySelectField = document.getElementById("categorySelectField");
 
 
 // AUTO-DETECT CheckBox Functionality
@@ -17,17 +18,28 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
     event.preventDefault(); 
 
     const params = new URLSearchParams();
-    params.append('keyword', 'value1');
-    params.append('param2', 'value2');
+    params.append('keyword', keywordTextField.value);
+    params.append('distance', distanceTextField.value);
+    params.append('category', categorySelectField.value);
+    params.append('location', locationTextField.value);
+    params.append('autodetect', autoDetectCheckBox.checked);
 
-    const url = new URL('http://example.com/api/data');
+
+    const url = new URL('http://localhost:3000/findbiz');
     url.search = params.toString();
 
-    fetch('http://localhost/findbiz')
+    fetch(url)
     .then(response => {
+        console.log('Request made with the following params');
+        console.log(params);
+        console.log('------ end of params ------');
+        console.log('printing resposne');
+        console.log(response.json());
         // Handle the response
     })
     .catch(error => {
+        console.log('Errow on submitting the form');
+        console.log(error);
         // Handle any errors
     });
 });
