@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
+
+
+.searchCard{
+    width: 60%;
+}
+
+input::placeholder {
+    /* font-style: italic; */
+    padding-left: 3px !important;
+}
+
+input{
+    padding: 5px 2px !important;
+    margin-bottom: 10px !important;
+}
+
+label{
+    padding: 0px !important;
+    margin: 0px !important;
+}
