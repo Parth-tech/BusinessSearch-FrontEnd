@@ -101,7 +101,9 @@ function createTableRow(index, business) {
     tableRow.style.cursor = 'pointer';
     // tableRow.classList.add('cursor-pointer');
 
-    tableRow.onclick = businessRowClicked(business.id);
+    tableRow.addEventListener('click', function() {
+        businessRowClicked(business.id);
+      });
 
     // Sr. No. column
     const srNoColumn = document.createElement('td');
@@ -199,7 +201,7 @@ async function businessRowClicked(businessId)  {
     const url = new URL('http://localhost:3000/getbizdetails');
     url.search = params.toString();
 
-    fetch(url)
+    await fetch(url)
     .then(response => {
         
 
