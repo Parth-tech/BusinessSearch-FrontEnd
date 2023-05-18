@@ -22,3 +22,23 @@ label{
     padding: 0px !important;
     margin: 0px !important;
 }
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.custom-half-star{
+    /* --fa-primary-color: #f5e000 !important;
+    --fa-secondary-color: #999999 !important; */
+    background-image: linear-gradient(to right, #f5e100cd 50%, #999999 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.custom-empty-star{
+    color: #999999 !important;
+}
+
+.custom-filled-star{
+    color: #f5e100cd !important;
+}
