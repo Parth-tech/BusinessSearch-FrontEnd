@@ -11,7 +11,10 @@ autoDetectCheckBox.addEventListener("change", function() {
     locationTextField.disabled = autoDetectCheckBox.checked;
 });
 
-
+window.onload = function() {
+    var businessDetailsDiv = document.getElementById('businessDetailsDiv');
+    businessDetailsDiv.style.display = 'none';
+};
 // SUBMIT Btn Functionality
 var submitBtn = document.getElementById("submitBtn");
 document.getElementById("searchForm").addEventListener("submit", function(event) {
@@ -151,7 +154,7 @@ function createTableRow(index, business) {
     }
     // Append the star elements to the container
     // const ratingStarsContainer = document.getElementById('ratingStars');
-    console.log('Printing the starElements: \n', starElements.length, '\n', starElements);
+    // console.log('Printing the starElements: \n', starElements.length, '\n', starElements);
     starElements.forEach(star => {
         ratingColumn.appendChild(star);
     });
@@ -203,18 +206,80 @@ async function businessRowClicked(businessId)  {
 
     await fetch(url)
     .then(response => {
-        
 
         response.json()
         .then(detailedBusinessObject => {
-
             console.log(detailedBusinessObject);
+
+            // detailedBusinessObject = detailedBusinessObject.detailedBusinessData;
+            // Giving Business Title Above the tabs
+            var businessName = document.createElement('p');
+            var businessNameDiv = document.getElementById('businessName');
+            businessName.textContent = detailedBusinessObject.detailedBusinessData.name;
+            businessName.classList.add('text-center', 'p-2', 'h2');
+            businessNameDiv.innerHTML = "";
+            businessNameDiv.appendChild(businessName);
+
+            // create a wrapping main column to wrap all rows
+            var column = document.createElement('div');
+            column.classList.add('col');
+
+            var titles = detailedBusinessObject.detailedBusinessData.categories.map(function(obj) {
+                return obj.title;
+              });
+              
+            var joinedTitles = titles.join(' | ');
+
+            let labelArray = [ ['Address', 'Category'], ['Phone', 'Price'], ['Review Count', 'Rating'] ]
+            let valueArray = [ 
+                [detailedBusinessObject.detailedBusinessData.location.join('\n'), joinedTitles],
+                [detailedBusinessObject.detailedBusinessData.display_phone, detailedBusinessObject.detailedBusinessData.price],
+                [detailedBusinessObject.detailedBusinessData.review_count, detailedBusinessObject.detailedBusinessData.rating]
+            ]
+
+            console.log('Label Array \n', labelArray);
+            console.log('Value Array \n', valueArray);
+            // call functions to create rows
+
+            for(let i=0; i<labelArray.length; i++){
+                // add rows to main col
+                // console.log('Logging I value: \n', i);
+                column.appendChild(createDetailCardRow(labelArray[i], valueArray[i]));
+            }
+
+            // add main col to a container div
+            var businessDetailsCard = document.getElementById('businessDetailsCard');
+            businessDetailsCard.innerHTML = '';
+            businessDetailsCard.appendChild(column);
+
+
+            var mapHTMLDiv = document.getElementById('mapHTML');
+            var reviewsTabDiv = document.getElementById('reviewsTab');
+            reviewsTabDiv.innerHTML = detailedBusinessObject.renderedReviews;
+            // mapHTMLDiv.innerHTML = detailedBusinessObject.mapHTML;
+            // mapHTMLDiv.innerHTML = "";
+
+            var location = detailedBusinessObject.mapHTML.results[0].geometry.location;
+            var mapOptions = {
+                center: location,
+                zoom: 12
+            };
+            var map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
+            // map.setMap(document.getElementById('mapHTML'));
+
+            // let temp = document.createElement('p').textContent = "Maps";
+            // mapHTMLDiv.appendChild(temp);
+
+            var businessDetailsDiv = document.getElementById('businessDetailsDiv');
+            businessDetailsDiv.style.display = 'block';
         })
         .catch(error => {
             console.log('Error while parsing JSON Response of Detailed Business Card');
             console.error(error);
             // Handle JSON parsing error
         });
+
+
         // Handle the response
     })
     .catch(error => {
@@ -223,3 +288,57 @@ async function businessRowClicked(businessId)  {
         // Handle any errors
     });
 }
+
+function createDetailCardRow(labelArray, valueArray){
+    // console.log('Label Array Func Parameter: \n', labelArray);
+    // console.log('Value Array Func Parameter: \n', valueArray);
+    var row = document.createElement('div');
+    row.classList.add('row');
+    
+    for(let i=0 ; i<labelArray.length; i++){
+        var column = document.createElement('div');
+        column.classList.add('col-6');
+
+        // creating label
+        var label = document.createElement('p');
+        label.textContent = labelArray[i];
+        label.classList.add('text-center', 'h5','m-0', 'mt-1');
+        column.appendChild(label);
+        
+        // creating value
+        var value = document.createElement('p');
+        value.classList.add('m-0', 'mb-1', 'text-center');
+        value.textContent = (valueArray[i] == "" || valueArray[i] == null || valueArray[i] == undefined) 
+            ? 'Not Available' 
+            : valueArray[i];
+        column.appendChild(value);
+
+        row.appendChild(column);
+    }
+
+    return row;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var container = document.querySelector('#businessDetailsDiv');
+    var tabs = container.querySelectorAll('.nav-tabs a');
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetTab = container.querySelector(this.getAttribute('href'));
+            var activeTab = container.querySelector('.nav-link.active');
+            if (activeTab && activeTab !== this) {
+            activeTab.classList.remove('active');
+            }
+            this.classList.add('active');
+            var activeContent = container.querySelector('.tab-pane.fade.show.active');
+            if (activeContent) {
+            activeContent.classList.remove('show', 'active');
+            }
+            if(targetTab!=null || targetTab!= undefined){
+                targetTab.classList.add('show', 'active');
+            }
+
+      });
+    });
+});
