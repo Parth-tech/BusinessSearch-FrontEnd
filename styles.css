@@ -2,10 +2,18 @@
     box-sizing: border-box;
 }
 
-
+body {
+    background-image: url("./assets/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 
 .searchCard{
     width: 60%;
+    background-color: #ffffff40 !important;
+    /* -webkit-backdrop-filter: blur(5px); */
+    backdrop-filter: blur(5px) !important;
 }
 
 input::placeholder {
@@ -72,7 +80,9 @@ tabs .nav-link.active {
 #businessDetailsDiv{
     border-radius: 8px;
     box-shadow: 1px 3px 4px 4px #80008038;
-    
+    background-color: #ffffff40 !important;
+    /* -webkit-backdrop-filter: blur(5px); */
+    backdrop-filter: blur(5px) !important;
 }
 
 .nav-link:focus, .nav-link:hover {

@@ -3,6 +3,71 @@ var locationTextField = document.getElementById("locationTextField");
 var keywordTextField = document.getElementById("keywordTextField");
 var distanceTextField = document.getElementById("distanceTextField");
 var categorySelectField = document.getElementById("categorySelectField");
+var autoCompleteDatalist = document.getElementById("datalistOptions");
+
+
+let typingTimer;
+const doneTypingInterval = 500; // Delay in milliseconds
+
+// Get the input field
+// Event listener for input field to trigger the backend call
+keywordTextField.addEventListener('keyup', () => {
+    clearTimeout(typingTimer);
+    if (keywordTextField.value) {
+        typingTimer = setTimeout(autocomplete, doneTypingInterval);
+    }
+});
+
+function autocomplete() {
+    const searchText = keywordTextField.value;
+
+    if(searchText.length >= 3){
+        // const payload = JSON.stringify({ searchText });
+      
+        // const headers = new Headers();
+        // headers.append('Content-Type', 'application/json');
+      
+        const params = new URLSearchParams();
+        params.append('keyword', searchText);
+
+        const url = new URL('http://localhost:3000/autocomplete');
+        url.search = params.toString();
+
+        fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Parse the response data as JSON
+            } else {
+                throw new Error('Error:', response.status);
+            }
+        })
+        .then(data1 => {
+            let data = data1.autocomplete;
+            console.log('Data rec', data);
+            autoCompleteDatalist.innerHTML = "";
+
+            for (let i = 0; i < data.length; i++) {
+
+                const autoCompleteText = data[i].text;
+                const option = document.createElement("option");
+                option.value = autoCompleteText;
+                // option.textContent = autoCompleteText;
+                console.log('---Option Log----',option, '-------------');
+                autoCompleteDatalist.appendChild(option);
+
+            }
+
+            console.log('---AutoComplete Log----',data, '-------------');
+            console.log('---AutoCompleteDataList Log----',autoCompleteDatalist, '-------------');
+        })
+        .catch(error => {
+            // Handle errors or unsuccessful response
+            console.error(error);
+        });
+    }
+  
+  }
+  
 
 
 // AUTO-DETECT CheckBox Functionality
@@ -10,11 +75,6 @@ autoDetectCheckBox.addEventListener("change", function() {
     locationTextField.value="";
     locationTextField.disabled = autoDetectCheckBox.checked;
 });
-
-// window.onload = function() {
-//     var businessDetailsDiv = document.getElementById('businessDetailsDiv');
-//     businessDetailsDiv.style.display = 'none';
-// };
 
 
 // SUBMIT Btn Functionality
@@ -237,8 +297,6 @@ clearButton.addEventListener("click", function() {
     document.getElementById('businessDetailsCard').innerHTML = "";
     document.getElementById('reviewsTab').innerHTML = "";
     document.getElementById('businessDetailsDiv').style.cssText = "display: none !important;";
-
-
 
 });
 

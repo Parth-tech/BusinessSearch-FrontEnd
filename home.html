@@ -33,7 +33,10 @@
                         <div class="col-12">
                             <!-- Keyword Field -->
                             <label for="keywordTextField" class="form-label">Keyword<sup class="text-danger">*</sup></label>
-                            <input type="text" class="form-control" id="keywordTextField" placeholder="" required>
+                            <input type="text" class="form-control" list="datalistOptions" id="keywordTextField" placeholder="" required autocomplete="off">
+                            <datalist id="datalistOptions">
+                                <!-- <option value="San Francisco"> -->
+                            </datalist>
                         </div>
                     </div> 
     
@@ -106,7 +109,7 @@
             </div>
 
             <div>
-                <ul class="nav nav-tabs d-flex justify-content-evenly" style="background-color: rgb(52, 0, 125); border-radius: 10px;" id="myTabs" role="tablist">
+                <ul class="nav nav-tabs d-flex justify-content-evenly" style="background-color: rgb(52, 0, 125); border-radius: 0px; border: 0px solid black;" id="myTabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="tab1" data-toggle="tab" href="#businessDetailsCard" role="tab" aria-controls="businessDetailsCard" aria-selected="true">Business Details</a>
                 </li>
