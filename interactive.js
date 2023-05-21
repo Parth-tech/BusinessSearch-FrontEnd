@@ -11,18 +11,32 @@ autoDetectCheckBox.addEventListener("change", function() {
     locationTextField.disabled = autoDetectCheckBox.checked;
 });
 
-window.onload = function() {
-    var businessDetailsDiv = document.getElementById('businessDetailsDiv');
-    businessDetailsDiv.style.display = 'none';
-};
+// window.onload = function() {
+//     var businessDetailsDiv = document.getElementById('businessDetailsDiv');
+//     businessDetailsDiv.style.display = 'none';
+// };
+
+
 // SUBMIT Btn Functionality
 var submitBtn = document.getElementById("submitBtn");
 document.getElementById("searchForm").addEventListener("submit", function(event) {
     event.preventDefault(); 
+    
+    // on submitting the form, erasing the Business's Detail Card 
+
+    document.getElementById('businessName').innerHTML = "";
+    document.getElementById('mapContainer').innerHTML = "";
+    document.getElementById('businessDetailsCard').innerHTML = "";
+    document.getElementById('reviewsTab').innerHTML = "";
+    document.getElementById('businessDetailsDiv').style.cssText = "display: none !important;";
 
     const params = new URLSearchParams();
     params.append('keyword', keywordTextField.value);
-    params.append('distance', distanceTextField.value);
+    params.append('distance', (distanceTextField.value == null 
+                                || distanceTextField.value == undefined 
+                                || distanceTextField.value == "") 
+                                ? "10"
+                                : distanceTextField.value );
     params.append('category', categorySelectField.value);
     params.append('location', locationTextField.value);
     params.append('autodetect', autoDetectCheckBox.checked);
@@ -34,8 +48,8 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
     fetch(url)
     .then(response => {
         const table = document.createElement('table');
-        table.classList.add('table', 'table-light', 'table-striped', 'table-bordered' ,'rounded', 'table-hover', 'text-center');
-
+        table.classList.add('table', 'table-dark', 'table-striped', 'table-bordered' ,'rounded', 'table-hover', 'text-center');
+        table.style.cssText = 'overflow:hidden;';
         const thead = document.createElement('thead');
         thead.id = 'table-header';
 
@@ -54,15 +68,36 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
 
         response.json()
         .then(businessObject => {
-            for (let i = 0; i < businessObject.length; i++) {
-                const business = businessObject[i];
-                const tableRow = createTableRow(i, business);
-                tbody.appendChild(tableRow);
-            }
-            console.log(businessObject);
-
             let tableDiv = document.getElementById('tableDiv');
-            tableDiv.appendChild(table);
+            if(businessObject.length != 0){
+                for (let i = 0; i < businessObject.length; i++) {
+                    const business = businessObject[i];
+                    const tableRow = createTableRow(i, business);
+                    tbody.appendChild(tableRow);
+                }
+                console.log(businessObject);
+    
+                
+                tableDiv.innerHTML = "";
+                tableDiv.appendChild(table);
+            }
+            else{
+                let noResultsDiv = document.createElement('div');
+
+                noResultsDiv.setAttribute('id', 'noResultsDiv');
+                noResultsDiv.classList.add('mx-auto', 'my-2');
+                
+                
+                let noResultsLabel = document.createElement('p');
+                noResultsLabel.style.margin = "15px";
+                noResultsLabel.style.color = "#b20000";
+                noResultsLabel.textContent = "No Results Available";
+                
+                noResultsDiv.appendChild(noResultsLabel);
+
+                tableDiv.innerHTML = "";
+                tableDiv.appendChild(noResultsDiv);
+            }
             // Process the JSON data
         })
         .catch(error => {
@@ -193,7 +228,18 @@ function createTableRow(index, business) {
 var clearButton = document.getElementById("clearButton");
 var form = document.getElementById("searchForm");
 clearButton.addEventListener("click", function() {
-  form.reset(); // Reset the form fields
+    form.reset(); // Reset the form fields
+
+    // removing table contents
+    document.getElementById('tableDiv').innerHTML = "";
+    document.getElementById('businessName').innerHTML = "";
+    document.getElementById('mapContainer').innerHTML = "";
+    document.getElementById('businessDetailsCard').innerHTML = "";
+    document.getElementById('reviewsTab').innerHTML = "";
+    document.getElementById('businessDetailsDiv').style.cssText = "display: none !important;";
+
+
+
 });
 
 
@@ -221,57 +267,85 @@ async function businessRowClicked(businessId)  {
             businessNameDiv.appendChild(businessName);
 
             // create a wrapping main column to wrap all rows
-            var column = document.createElement('div');
-            column.classList.add('col');
+            // ----------------------
+            // var column = document.createElement('div');
+            // column.classList.add('col');
 
-            var titles = detailedBusinessObject.detailedBusinessData.categories.map(function(obj) {
-                return obj.title;
-              });
+            // var titles = detailedBusinessObject.detailedBusinessData.categories.map(function(obj) {
+            //     return obj.title;
+            //   });
               
-            var joinedTitles = titles.join(' | ');
+            // var joinedTitles = titles.join(' | ');
 
-            let labelArray = [ ['Address', 'Category'], ['Phone', 'Price'], ['Review Count', 'Rating'] ]
-            let valueArray = [ 
-                [detailedBusinessObject.detailedBusinessData.location.join('\n'), joinedTitles],
-                [detailedBusinessObject.detailedBusinessData.display_phone, detailedBusinessObject.detailedBusinessData.price],
-                [detailedBusinessObject.detailedBusinessData.review_count, detailedBusinessObject.detailedBusinessData.rating]
-            ]
+            // let labelArray = [ ['Address', 'Category'], ['Phone', 'Price'], ['Review Count', 'Rating'] ]
+            // let valueArray = [ 
+            //     [detailedBusinessObject.detailedBusinessData.location.join('\n'), joinedTitles],
+            //     [detailedBusinessObject.detailedBusinessData.display_phone, detailedBusinessObject.detailedBusinessData.price],
+            //     [detailedBusinessObject.detailedBusinessData.review_count, detailedBusinessObject.detailedBusinessData.rating]
+            // ]
 
-            console.log('Label Array \n', labelArray);
-            console.log('Value Array \n', valueArray);
-            // call functions to create rows
+            // console.log('Label Array \n', labelArray);
+            // console.log('Value Array \n', valueArray);
+            // // call functions to create rows
 
-            for(let i=0; i<labelArray.length; i++){
-                // add rows to main col
-                // console.log('Logging I value: \n', i);
-                column.appendChild(createDetailCardRow(labelArray[i], valueArray[i]));
-            }
+            // for(let i=0; i<labelArray.length; i++){
+            //     // add rows to main col
+            //     // console.log('Logging I value: \n', i);
+            //     column.appendChild(createDetailCardRow(labelArray[i], valueArray[i]));
+            // }
 
-            // add main col to a container div
+            // // add main col to a container div
+            // var businessDetailsCard = document.getElementById('businessDetailsCard');
+            // businessDetailsCard.innerHTML = '';
+            // businessDetailsCard.appendChild(column);
+            // ---------------
+
             var businessDetailsCard = document.getElementById('businessDetailsCard');
             businessDetailsCard.innerHTML = '';
-            businessDetailsCard.appendChild(column);
+            businessDetailsCard.innerHTML =  detailedBusinessObject.renderedBusinessDetailsTemplate;
 
 
             var mapHTMLDiv = document.getElementById('mapHTML');
             var reviewsTabDiv = document.getElementById('reviewsTab');
             reviewsTabDiv.innerHTML = detailedBusinessObject.renderedReviews;
-            // mapHTMLDiv.innerHTML = detailedBusinessObject.mapHTML;
-            // mapHTMLDiv.innerHTML = "";
-
+            
+            // var location = detailedBusinessObject.detailedBusinessData.coordinates;
+            // console.log('*****************\n', location,'*****************\n');
             var location = detailedBusinessObject.mapHTML.results[0].geometry.location;
             var mapOptions = {
                 center: location,
-                zoom: 12
+                zoom: 14
             };
             var map = new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
-            // map.setMap(document.getElementById('mapHTML'));
+
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: detailedBusinessObject.detailedBusinessData.name
+            });
+
+            // var iframe = document.createElement("iframe");
+            // Set the src attribute
+            // iframe.src = `https://maps.google.com/maps?width=100%25&amp;height=400&amp;hl=en&amp;q=${detailedBusinessObject.detailedBusinessData.location.join(' ').replace(/ /g, '%20')}&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`;
+            // iframe.src = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13226.75188220996!2d${location.longitude}!3d${location.latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7c15f5f10df%3A0x3b0942cd1b704851!2s${detailedBusinessObject.detailedBusinessData.location.join(' ').replace(/ /g, '%20')}!5e0!3m2!1sen!2sus!4v1684657572552!5m2!1sen!2sus`;
+            // iframe.src = `https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13226.75188220996!2d${location.longitude}!3d${location.latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x3b0942cd1b704851!2s${encodeURIComponent(detailedBusinessObject.detailedBusinessData.location.join(' '))}!5e0!3m2!1sen!2sus!4v1684657572552!5m2!1sen!2sus`;
+            
+            // Set the width and height attributes
+            // iframe.width = "100%";
+            // iframe.height = "400";
+
+            // Set the style attribute
+            // iframe.style.border = "0";
+            // iframe.style.allowfullscreen = "";
+            // iframe.style.loading = "lazy";
+            // document.getElementById('mapContainer').innerHTML = '';
+            // document.getElementById('mapContainer').appendChild(iframe);
 
             // let temp = document.createElement('p').textContent = "Maps";
             // mapHTMLDiv.appendChild(temp);
 
             var businessDetailsDiv = document.getElementById('businessDetailsDiv');
-            businessDetailsDiv.style.display = 'block';
+            businessDetailsDiv.style.cssText = 'display: block !important;';
         })
         .catch(error => {
             console.log('Error while parsing JSON Response of Detailed Business Card');

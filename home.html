@@ -10,19 +10,19 @@
     <title>Business Search</title>
 </head>
 <body>
-    <ul class="nav justify-content-end nav-underline mx-3">
+    <!-- <ul class="nav justify-content-end nav-underline mx-3">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Search</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="favorites.html">Favorites</a>
         </li>
-    </ul>
+    </ul> -->
 
 
     <!-- Search Form -->
-    <div class="container card-container d-flex align-items-center justify-content-center">
-        <div class="card m-5 searchCard">
+    <div class=" card-container d-flex align-items-center justify-content-center">
+        <div class="card col-11 col-sm-6 my-4 mx-1 searchCard">
             <div class="card-body ">
                 <h5 class="card-title mb-3 text-center">Search a business</h5>
 
@@ -39,12 +39,12 @@
     
                     <!-- Distance & Category Row -->
                     <div class="m-1 row justify-content-between">
-                        <div class="col-5">
+                        <div class="col-12 col-md-5">
                             <!-- Distance Field -->
                             <label for="distanceTextField" class="form-label">Distance</label>
                             <input type="number" max="24" class="form-control" id="distanceTextField" placeholder="10">
                         </div>
-                        <div class="col-5">
+                        <div class="col-12 col-md-5">
                             <!-- Category Field -->
                             <label for="categorySelectField" class="form-label">Category<sup class="text-danger">*</sup></label>
                             <select class="form-select" id="categorySelectField" aria-label="category">
@@ -94,46 +94,49 @@
         </div>
     </div>
 
-    <div class="container d-flex align-items-center justify-content-center" id="tableDiv">
+    <div class="container table-responsive align-items-center justify-content-center" id="tableDiv">
 
     </div>
 
+    <div class="col-12 d-flex justify-content-center mb-3">
+        <div class="col-12 col-sm-10 mb-5 m-0 m-sm-1 align-items-center justify-content-center" style="display: block;padding: 0px;" id="businessDetailsDiv" >
 
-    <div class="container align-items-center justify-content-center" id="businessDetailsDiv">
+            <div class="row col-12" id="businessName">
 
-        <div class="row col-12" id="businessName">
+            </div>
 
+            <div>
+                <ul class="nav nav-tabs d-flex justify-content-evenly" style="background-color: rgb(52, 0, 125); border-radius: 10px;" id="myTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#businessDetailsCard" role="tab" aria-controls="businessDetailsCard" aria-selected="true">Business Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab2" data-toggle="tab" href="#mapHTML" role="tab" aria-controls="mapHTML" aria-selected="false">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab3" data-toggle="tab" href="#reviewsTab" role="tab" aria-controls="reviewsTab" aria-selected="false">Top Reviews</a>
+                </li>
+                </ul>
+            </div>
+            
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="businessDetailsCard" role="tabpanel" aria-labelledby="tab1">
+                    <!-- Content for Tab 1 -->
+                </div>
+
+                <div class="tab-pane fade" id="mapHTML" role="tabpanel" aria-labelledby="tab2">
+                    <!-- Content for Tab 2 -->
+                    <div id="mapContainer">
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="reviewsTab" role="tabpanel" aria-labelledby="tab3">
+                    <!-- Content for Tab 3 -->
+                </div>
+            </div>
+            
         </div>
-
-        <div>
-            <ul class="nav nav-tabs d-flex justify-content-evenly" id="myTabs" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="tab1" data-toggle="tab" href="#businessDetailsCard" role="tab" aria-controls="businessDetailsCard" aria-selected="true">Business Details</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="tab2" data-toggle="tab" href="#mapHTML" role="tab" aria-controls="mapHTML" aria-selected="false">Location</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="tab3" data-toggle="tab" href="#reviewsTab" role="tab" aria-controls="reviewsTab" aria-selected="false">Top Reviews</a>
-              </li>
-            </ul>
-          </div>
-          
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="businessDetailsCard" role="tabpanel" aria-labelledby="tab1">
-              <!-- Content for Tab 1 -->
-            </div>
-            <div class="tab-pane fade" id="mapHTML" role="tabpanel" aria-labelledby="tab2">
-              <!-- Content for Tab 2 -->
-              <div id="mapContainer">
-
-              </div>
-            </div>
-            <div class="tab-pane fade" id="reviewsTab" role="tabpanel" aria-labelledby="tab3">
-              <!-- Content for Tab 3 -->
-            </div>
-          </div>
-          
     </div>
 
 
