@@ -136,3 +136,13 @@ link:hover {
 #businessDetailsDiv{
     display: none !important;
 }
+
+.carousel-control-prev,
+.carousel-control-next {
+    color: grey !important;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    color: black !important;
+}

@@ -119,7 +119,7 @@ function createTableHeaders(tableHeader) {
     const headerRow = document.createElement('tr');
 
     // Column names
-    const columnNames = ['Sr. No.', 'Image', 'Name', 'Rating', 'No. of Reviews', 'Distance (miles)'];
+    const columnNames = ['Sr. No.', 'Image', 'Name', 'Rating', 'No. of Reviews', 'Distance'];
 
     // Create th elements for each column name
     columnNames.forEach(columnName => {
