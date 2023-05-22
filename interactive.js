@@ -109,7 +109,7 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
     .then(response => {
         const table = document.createElement('table');
         table.classList.add('table', 'table-dark', 'table-striped', 'table-bordered' ,'rounded', 'table-hover', 'text-center');
-        table.style.cssText = 'overflow:hidden;';
+        table.style.cssText = "overflow:hidden; font-family: 'Urbanist', sans-serif;";
         const thead = document.createElement('thead');
         thead.id = 'table-header';
 
@@ -177,6 +177,7 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
 function createTableHeaders(tableHeader) {
     // const tableHeader = document.getElementById('table-header');
     const headerRow = document.createElement('tr');
+    headerRow.style.color = '#a1dfdf';
 
     // Column names
     const columnNames = ['Sr. No.', 'Image', 'Name', 'Rating', 'No. of Reviews', 'Distance'];
@@ -192,6 +193,7 @@ function createTableHeaders(tableHeader) {
 
     // Append the header row to the table header
     tableHeader.appendChild(headerRow);
+    scrollToElement('tableDiv',1000);
 }
 
 function createTableRow(index, business) {
@@ -317,10 +319,10 @@ async function businessRowClicked(businessId)  {
 
             // detailedBusinessObject = detailedBusinessObject.detailedBusinessData;
             // Giving Business Title Above the tabs
-            var businessName = document.createElement('p');
+            var businessName = document.createElement('h2');
             var businessNameDiv = document.getElementById('businessName');
             businessName.textContent = detailedBusinessObject.detailedBusinessData.name;
-            businessName.classList.add('text-center', 'p-2', 'h2');
+            businessName.classList.add('text-center', 'p-3', 'h2');
             businessNameDiv.innerHTML = "";
             businessNameDiv.appendChild(businessName);
 
@@ -382,6 +384,7 @@ async function businessRowClicked(businessId)  {
                 title: detailedBusinessObject.detailedBusinessData.name
             });
 
+
             // var iframe = document.createElement("iframe");
             // Set the src attribute
             // iframe.src = `https://maps.google.com/maps?width=100%25&amp;height=400&amp;hl=en&amp;q=${detailedBusinessObject.detailedBusinessData.location.join(' ').replace(/ /g, '%20')}&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`;
@@ -404,6 +407,7 @@ async function businessRowClicked(businessId)  {
 
             var businessDetailsDiv = document.getElementById('businessDetailsDiv');
             businessDetailsDiv.style.cssText = 'display: block !important;';
+            scrollToElement('businessDetailsDiv',1000);
         })
         .catch(error => {
             console.log('Error while parsing JSON Response of Detailed Business Card');
@@ -419,6 +423,8 @@ async function businessRowClicked(businessId)  {
         console.log(error);
         // Handle any errors
     });
+
+    
 }
 
 function createDetailCardRow(labelArray, valueArray){
@@ -474,3 +480,30 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 });
+
+function scrollToElement(elementId, duration) {
+    const element = document.getElementById(elementId);
+    const elementPosition = element.getBoundingClientRect().top;
+    const startingY = window.pageYOffset;
+    const diff = elementPosition - startingY;
+    let start;
+  
+    function step(timestamp) {
+      if (!start) start = timestamp;
+      const timeElapsed = timestamp - start;
+      const scrollY = easeInOutQuad(timeElapsed, startingY, diff, duration);
+      window.scrollTo(0, scrollY);
+      if (timeElapsed < duration) {
+        window.requestAnimationFrame(step);
+      }
+    }
+  
+    function easeInOutQuad(t, b, c, d) {
+      t /= d / 2;
+      if (t < 1) return c / 2 * t * t + b;
+      t--;
+      return -c / 2 * (t * (t - 2) - 1) + b;
+    }
+  
+    window.requestAnimationFrame(step);
+}
